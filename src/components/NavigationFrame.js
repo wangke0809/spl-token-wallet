@@ -69,9 +69,9 @@ export default function NavigationFrame({ children }) {
   const isExtensionWidth = useIsExtensionWidth();
   return (
     <>
-      <AppBar position="static">
+      <AppBar position='static'>
         <Toolbar>
-          <Typography variant="h6" className={classes.title} component="h1">
+          <Typography variant='h6' className={classes.title} component='h1'>
             {isExtensionWidth ? 'Sollet' : 'Solana SPL Token Wallet'}
           </Typography>
           <NavigationButtons />
@@ -115,8 +115,8 @@ function ExpandButton() {
   };
 
   return (
-    <Tooltip title="Expand View">
-      <IconButton color="inherit" onClick={onClick}>
+    <Tooltip title='Expand View'>
+      <IconButton color='inherit' onClick={onClick}>
         <OpenInNew />
       </IconButton>
     </Tooltip>
@@ -131,14 +131,14 @@ function WalletButton() {
   return (
     <>
       <Hidden smUp>
-        <Tooltip title="Wallet Balances">
-          <IconButton color="inherit" onClick={onClick}>
+        <Tooltip title='Wallet Balances'>
+          <IconButton color='inherit' onClick={onClick}>
             <MonetizationOn />
           </IconButton>
         </Tooltip>
       </Hidden>
       <Hidden xsDown>
-        <Button color="inherit" onClick={onClick} className={classes.button}>
+        <Button color='inherit' onClick={onClick} className={classes.button}>
           Wallet
         </Button>
       </Hidden>
@@ -157,8 +157,8 @@ function ConnectionsButton() {
   return (
     <>
       <Hidden smUp>
-        <Tooltip title="Manage Connections">
-          <IconButton color="inherit" onClick={onClick}>
+        <Tooltip title='Manage Connections'>
+          <IconButton color='inherit' onClick={onClick}>
             <Badge
               badgeContent={connectionAmount}
               classes={{ badge: classes.badge }}
@@ -173,7 +173,7 @@ function ConnectionsButton() {
           badgeContent={connectionAmount}
           classes={{ badge: classes.badge }}
         >
-          <Button color="inherit" onClick={onClick} className={classes.button}>
+          <Button color='inherit' onClick={onClick} className={classes.button}>
             Connections
           </Button>
         </Badge>
@@ -192,7 +192,7 @@ function NetworkSelector() {
     <>
       <Hidden xsDown>
         <Button
-          color="inherit"
+          color='inherit'
           onClick={(e) => setAnchorEl(e.target)}
           className={classes.button}
         >
@@ -200,8 +200,8 @@ function NetworkSelector() {
         </Button>
       </Hidden>
       <Hidden smUp>
-        <Tooltip title="Select Network" arrow>
-          <IconButton color="inherit" onClick={(e) => setAnchorEl(e.target)}>
+        <Tooltip title='Select Network' arrow>
+          <IconButton color='inherit' onClick={(e) => setAnchorEl(e.target)}>
             <SolanaIcon />
           </IconButton>
         </Tooltip>
@@ -227,7 +227,7 @@ function NetworkSelector() {
           >
             <ListItemIcon className={classes.menuItemIcon}>
               {cluster.apiUrl === endpoint ? (
-                <CheckIcon fontSize="small" />
+                <CheckIcon fontSize='small' />
               ) : null}
             </ListItemIcon>
             {cluster.apiUrl}
@@ -244,6 +244,7 @@ function WalletSelector() {
     hardwareWalletAccount,
     setHardwareWalletAccount,
     setWalletSelector,
+    batchAddAccount,
     addAccount,
   } = useWalletSelector();
   const [anchorEl, setAnchorEl] = useState(null);
@@ -298,6 +299,24 @@ function WalletSelector() {
           });
           setAddAccountOpen(false);
         }}
+        onBatchAdd={(batchData) => {
+          // for (let i = 0; i < batchData.length; i++) {
+          //   const data = batchData[i];
+          //   const name = data['name'];
+          //   console.log(name);
+          //   const importedAccount = data['importedAccount'];
+          //   addAccount({ name, importedAccount });
+          //   // setWalletSelector({
+          //   //   walletIndex: importedAccount ? undefined : accounts.length,
+          //   //   importedPubkey: importedAccount
+          //   //     ? importedAccount.publicKey.toString()
+          //   //     : undefined,
+          //   //   ledger: false,
+          //   // });
+          // }
+          batchAddAccount(batchData);
+          setAddAccountOpen(false);
+        }}
       />
       <ExportMnemonicDialog
         open={exportMnemonicOpen}
@@ -309,7 +328,7 @@ function WalletSelector() {
       />
       <Hidden xsDown>
         <Button
-          color="inherit"
+          color='inherit'
           onClick={(e) => setAnchorEl(e.target)}
           className={classes.button}
         >
@@ -317,8 +336,8 @@ function WalletSelector() {
         </Button>
       </Hidden>
       <Hidden smUp>
-        <Tooltip title="Select Account" arrow>
-          <IconButton color="inherit" onClick={(e) => setAnchorEl(e.target)}>
+        <Tooltip title='Select Account' arrow>
+          <IconButton color='inherit' onClick={(e) => setAnchorEl(e.target)}>
             <AccountIcon />
           </IconButton>
         </Tooltip>
@@ -355,7 +374,7 @@ function WalletSelector() {
         <Divider />
         <MenuItem onClick={() => setAddHardwareWalletDialogOpen(true)}>
           <ListItemIcon className={classes.menuItemIcon}>
-            <UsbIcon fontSize="small" />
+            <UsbIcon fontSize='small' />
           </ListItemIcon>
           Import Hardware Wallet
         </MenuItem>
@@ -366,7 +385,7 @@ function WalletSelector() {
           }}
         >
           <ListItemIcon className={classes.menuItemIcon}>
-            <AddIcon fontSize="small" />
+            <AddIcon fontSize='small' />
           </ListItemIcon>
           Add Account
         </MenuItem>
@@ -377,7 +396,7 @@ function WalletSelector() {
           }}
         >
           <ListItemIcon className={classes.menuItemIcon}>
-            <ImportExportIcon fontSize="small" />
+            <ImportExportIcon fontSize='small' />
           </ListItemIcon>
           Export Mnemonic
         </MenuItem>
@@ -388,7 +407,7 @@ function WalletSelector() {
           }}
         >
           <ListItemIcon className={classes.menuItemIcon}>
-            <ExitToApp fontSize="small" />
+            <ExitToApp fontSize='small' />
           </ListItemIcon>
           {'Log Out & Delete Mnemonic'}
         </MenuItem>
@@ -410,12 +429,12 @@ function Footer() {
   return (
     <footer className={classes.footer}>
       <Button
-        variant="outlined"
-        color="primary"
-        component="a"
-        target="_blank"
-        rel="noopener"
-        href="https://github.com/serum-foundation/spl-token-wallet"
+        variant='outlined'
+        color='primary'
+        component='a'
+        target='_blank'
+        rel='noopener'
+        href='https://github.com/serum-foundation/spl-token-wallet'
         startIcon={<CodeIcon />}
       >
         View Source
@@ -433,14 +452,14 @@ function AccountListItem({ account, classes, setAnchorEl, setWalletSelector }) {
         setWalletSelector(account.selector);
       }}
       selected={account.isSelected}
-      component="div"
+      component='div'
     >
       <ListItemIcon className={classes.menuItemIcon}>
-        {account.isSelected ? <CheckIcon fontSize="small" /> : null}
+        {account.isSelected ? <CheckIcon fontSize='small' /> : null}
       </ListItemIcon>
       <div style={{ display: 'flex', flexDirection: 'column' }}>
         <Typography>{account.name}</Typography>
-        <Typography color="textSecondary">
+        <Typography color='textSecondary'>
           {account.address.toBase58()}
         </Typography>
       </div>

@@ -251,6 +251,22 @@ export function WalletProvider({ children }) {
     enqueueSnackbar,
     derivationPath,
   ]);
+  function batchAddAccount(data) {
+    let newPrivateKeyImports = { ...privateKeyImports };
+    for (let i = 0; i < data.length; i++) {
+      const name = data[i]['name'];
+      const importedAccount = data[i]['importedAccount'];
+      const nonce = nacl.randomBytes(nacl.secretbox.nonceLength);
+      const plaintext = importedAccount.secretKey;
+      const ciphertext = nacl.secretbox(plaintext, nonce, importsEncryptionKey);
+      newPrivateKeyImports[importedAccount.publicKey.toString()] = {
+        name,
+        ciphertext: bs58.encode(ciphertext),
+        nonce: bs58.encode(nonce),
+      };
+    }
+    setPrivateKeyImports(newPrivateKeyImports);
+  }
   function addAccount({ name, importedAccount, ledger }) {
     if (importedAccount === undefined) {
       name && localStorage.setItem(`name${walletCount}`, name);
@@ -359,6 +375,7 @@ export function WalletProvider({ children }) {
         setPrivateKeyImports,
         accounts,
         addAccount,
+        batchAddAccount,
         setAccountName,
         derivationPath,
         hardwareWalletAccount,
@@ -476,6 +493,7 @@ export function useWalletSelector() {
   const {
     accounts,
     addAccount,
+    batchAddAccount,
     setWalletSelector,
     setAccountName,
     hardwareWalletAccount,
@@ -486,6 +504,7 @@ export function useWalletSelector() {
     accounts,
     setWalletSelector,
     addAccount,
+    batchAddAccount,
     setAccountName,
     hardwareWalletAccount,
     setHardwareWalletAccount,

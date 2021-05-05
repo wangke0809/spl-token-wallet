@@ -10,10 +10,27 @@ import Switch from '@material-ui/core/Switch';
 import { decodeAccount } from '../utils/utils';
 import DialogForm from './DialogForm';
 
-export default function AddAccountDialog({ open, onAdd, onClose }) {
+export default function AddAccountDialog({ open, onAdd, onBatchAdd, onClose }) {
   const [name, setName] = useState('');
   const [isImport, setIsImport] = useState(false);
   const [importedPrivateKey, setPrivateKey] = useState('');
+
+  function addBatchAccount(importedPrivateKey) {
+    try {
+      const importData = JSON.parse(importedPrivateKey);
+      const importAccounts = [];
+      for (let i = 0; i < importData.length; i++) {
+        importAccounts.push({
+          name: importData[i]['name'],
+          importedAccount: decodeAccount(importData[i]['sk']),
+        });
+      }
+      console.log(importAccounts);
+      onBatchAdd(importAccounts);
+    } catch (e) {
+      console.log(e);
+    }
+  }
 
   const importedAccount = isImport
     ? decodeAccount(importedPrivateKey)
@@ -41,10 +58,10 @@ export default function AddAccountDialog({ open, onAdd, onClose }) {
           }}
         >
           <TextField
-            label="Name"
+            label='Name'
             fullWidth
-            variant="outlined"
-            margin="normal"
+            variant='outlined'
+            margin='normal'
             value={name}
             onChange={(e) => setName(e.target.value.trim())}
           />
@@ -56,17 +73,17 @@ export default function AddAccountDialog({ open, onAdd, onClose }) {
                   onChange={() => setIsImport(!isImport)}
                 />
               }
-              label="Import private key"
+              label='Import private key'
             />
           </FormGroup>
           {isImport && (
             <TextField
-              label="Paste your private key here"
+              label='Paste your private key here'
               fullWidth
-              type="password"
+              type='password'
               value={importedPrivateKey}
-              variant="outlined"
-              margin="normal"
+              variant='outlined'
+              margin='normal'
               onChange={(e) => setPrivateKey(e.target.value.trim())}
             />
           )}
@@ -74,7 +91,8 @@ export default function AddAccountDialog({ open, onAdd, onClose }) {
       </DialogContent>
       <DialogActions>
         <Button onClick={onClose}>Close</Button>
-        <Button type="submit" color="primary" disabled={!isAddEnabled}>
+        <Button onClick={() => addBatchAccount(importedPrivateKey)}>Batch Add</Button>
+        <Button type='submit' color='primary' disabled={!isAddEnabled}>
           Add
         </Button>
       </DialogActions>
